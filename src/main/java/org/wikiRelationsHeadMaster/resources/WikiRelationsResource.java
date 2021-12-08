@@ -1,7 +1,5 @@
 package org.wikiRelationsHeadMaster.resources;
 
-import org.wikiRelationsHeadMaster.core.LinksObject;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
