@@ -1,4 +1,4 @@
-package org.wikiRelationsHeadMaster.core.networking;
+package org.wikiRelationsHeadMaster.core.Parsers;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -9,7 +9,7 @@ import java.util.Hashtable;
 
 public class JsonParsingClass {
     public static @NotNull Hashtable<Integer, Object> parseCircularLinks(String responseBody) {
-        JSONArray linkObjects = new JSONArray(responseBody);
+            JSONArray linkObjects = new JSONArray(responseBody);
         Hashtable<Integer, Object> parsedTable = new Hashtable<>();
         for (int i = 0; i < linkObjects.length(); i++) {
             Hashtable<String, Object> linkObjectTable = new Hashtable<>();
