@@ -1,4 +1,4 @@
-package org.wikiRelationsHeadMaster.core;
+package org.wikiRelationsHeadMaster.core.linksObjects;
 
 import java.util.ArrayList;
 
