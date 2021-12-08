@@ -1,13 +1,12 @@
 package org.wikiRelationsHeadMaster.core.networking;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONObject;
+import org.wikiRelationsHeadMaster.core.linksObjects.LinksObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
@@ -15,7 +14,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class HttpRequestClass {
 
@@ -24,12 +22,24 @@ public class HttpRequestClass {
             .build();
 
 
-    public static String sendPOSTRequest(String link, Integer id, String originalLink, ArrayList<String> links)
+    public static ArrayList<HashMap<String, Object>> turnLinksArrayToHashmap(ArrayList<LinksObject> linksObjectArrayList) {
+        ArrayList<HashMap<String, Object>> hashMapArrayList = new ArrayList<>();
+        for (LinksObject linksObject: linksObjectArrayList) {
+            HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("id", linksObject.getId());
+            hashMap.put("links", linksObject.getLinks());
+            hashMap.put("original link", linksObject.getOriginalLink());
+            hashMapArrayList.add(hashMap);
+        }
+
+        return hashMapArrayList;
+
+    }
+
+
+    public static void sendPOSTRequest(ArrayList<HashMap<String, Object>> data, String link)
             throws IOException, InterruptedException {
-        Map<Object, Object> data = new HashMap<>();
-        data.put("id", id);
-        data.put("originalLink", originalLink);
-        data.put("Links", links);
+
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -44,7 +54,6 @@ public class HttpRequestClass {
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        return response.body();
     }
 
     public static String sendGETRequest(String link) {
