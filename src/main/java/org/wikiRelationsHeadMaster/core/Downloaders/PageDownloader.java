@@ -1,4 +1,4 @@
-package org.wikiRelationsHeadMaster.core;
+package org.wikiRelationsHeadMaster.core.Downloaders;
 
 
 import org.jsoup.Jsoup;
@@ -11,7 +11,7 @@ public class PageDownloader {
         return Jsoup.connect(link).get();
     }
 
-    public static String getPageLinkFromQuery(String query) throws IOException {
+    public static String getPageLinkFromQuery(String query) {
         return "https://en.wikipedia.org/wiki/" + query;
     }
 
