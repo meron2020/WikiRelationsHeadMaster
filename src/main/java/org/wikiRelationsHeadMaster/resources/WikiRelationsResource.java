@@ -1,26 +1,47 @@
 package org.wikiRelationsHeadMaster.resources;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.wikiRelationsHeadMaster.core.ApplicationManager;
+import org.wikiRelationsHeadMaster.core.linksObjects.UserObject;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 @Path("/wiki_relations")
 public class WikiRelationsResource {
+    ApplicationManager applicationManager;
+    ArrayList<Integer> idArrayList;
+
+    public WikiRelationsResource(ApplicationManager applicationManager, ArrayList<Integer> idArrayList) {
+        this.applicationManager = applicationManager;
+        this.idArrayList = idArrayList;
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Integer getWikiRelationsResource() {
-        Random random = new Random();
+    public Object getWikiRelationsResource(UserObject userObject) {
+        ArrayList<HashMap<String, String>> ranked = applicationManager.getRankedLinksById(userObject.getId());
+            if (!ranked.isEmpty()) {
+                this.idArrayList.remove(userObject.getId());
+                return ranked;
+            }
+            else {
+                return null;
+            }
 
-        return random.nextInt(5000);
-    }
+        }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Object postQuery(String query) {
-        return null;
+    public Object postQuery(UserObject userObject) throws InterruptedException, IOException {
+        applicationManager.addThread(userObject.getQuery(), userObject.getId());
+        return "Added query thread";
     }
-
 }
