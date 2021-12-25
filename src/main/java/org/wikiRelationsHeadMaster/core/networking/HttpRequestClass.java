@@ -27,8 +27,8 @@ public class HttpRequestClass {
         for (LinksObject linksObject: linksObjectArrayList) {
             HashMap<String, Object> hashMap = new HashMap<>();
             hashMap.put("id", linksObject.getId());
-            hashMap.put("links", linksObject.getLinks());
-            hashMap.put("original link", linksObject.getOriginalLink());
+            hashMap.put("Links", linksObject.getLinks());
+            hashMap.put("Original Link", linksObject.getOriginalLink());
             hashMapArrayList.add(hashMap);
         }
 
@@ -37,7 +37,7 @@ public class HttpRequestClass {
     }
 
 
-    public static void sendPOSTRequest(ArrayList<HashMap<String, Object>> data, String link)
+    public static void sendPOSTRequest(HashMap<String, Object> data, String link)
             throws IOException, InterruptedException {
 
 
@@ -55,38 +55,32 @@ public class HttpRequestClass {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
     }
+    
 
-    public static String sendGETRequest(String link) {
-        BufferedReader reader;
-        String line;
-        StringBuilder responseContent = new StringBuilder();
+    public static String sendGETRequest(String link) throws IOException {
+        String responseToReturn = null;
+        URL obj = new URL(link);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setRequestMethod("GET");
+        int responseCode = con.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) { // success
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    con.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
 
-        try {
-            URL url = new URL(link);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            //Request setup
-            conn.setRequestMethod("GET");
-            conn.setConnectTimeout(60000);
-            conn.setReadTimeout(60000);
-
-            //Test if the response from the server is successfully
-            int status = conn.getResponseCode();
-
-            if (status >= 300) {
-                reader = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-                while ((line = reader.readLine()) != null) {
-                    responseContent.append(line);
-                }
-                reader.close();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
             }
+            in.close();
 
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            // print result
+            responseToReturn = response.toString();
+        } else {
+            System.out.println("GET request not worked");
         }
 
-        return responseContent.toString();
+        return responseToReturn;
     }
 }
 
