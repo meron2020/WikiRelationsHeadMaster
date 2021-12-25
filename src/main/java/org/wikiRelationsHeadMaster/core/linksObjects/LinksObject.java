@@ -3,14 +3,25 @@ package org.wikiRelationsHeadMaster.core.linksObjects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 public class LinksObject {
-    @JsonProperty("originalLink")
+    @JsonProperty("Original Link")
     public String originalLink;
-    @JsonProperty("links")
+    @JsonProperty("Links")
     public ArrayList<String> links;
     @JsonProperty("id")
     public Integer id;
+    public ArrayList<HashMap<String, String>> topTenLinks = new ArrayList<>();
+
+    public void setTopTenLinks(ArrayList<HashMap<String, String>> topTenLinks) {
+        this.topTenLinks = topTenLinks;
+    }
+
+    public ArrayList<HashMap<String, String>> getTopTenLinks() {
+        return topTenLinks;
+    }
 
     public String getOriginalLink() {
         return originalLink;
