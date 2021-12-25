@@ -12,7 +12,12 @@ public class PageDownloader {
     }
 
     public static String getPageLinkFromQuery(String query) {
-        return "https://en.wikipedia.org/wiki/" + query;
+        return String.format("http://en.wikipedia.org/w/index.php?action=render&title=%s", query);
+    }
+
+    public static void main(String[] args) throws IOException {
+        System.out.println(downloadPage(PageDownloader.getPageLinkFromQuery("Israel")));
+
     }
 
 }
