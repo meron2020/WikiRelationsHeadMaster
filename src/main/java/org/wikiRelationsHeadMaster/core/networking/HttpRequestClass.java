@@ -52,7 +52,7 @@ public class HttpRequestClass {
                 .header("Content-Type", "application/json")
                 .build();
 
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
     }
     
