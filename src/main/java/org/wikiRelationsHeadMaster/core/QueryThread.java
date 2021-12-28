@@ -2,7 +2,7 @@ package org.wikiRelationsHeadMaster.core;
 
 import org.jsoup.nodes.Document;
 import org.wikiRelationsHeadMaster.core.Parsers.HtmlParser;
-import org.wikiRelationsHeadMaster.core.linksObjects.LinksObject;
+import org.wikiRelationsHeadMaster.core.HeadMasterObjects.LinksObject;
 import org.wikiRelationsHeadMaster.core.Downloaders.PageDownloader;
 
 import java.io.IOException;
