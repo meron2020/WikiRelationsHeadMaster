@@ -1,7 +1,7 @@
 package org.wikiRelationsHeadMaster.core.networking;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.wikiRelationsHeadMaster.core.linksObjects.LinksObject;
+import org.wikiRelationsHeadMaster.core.HeadMasterObjects.LinksObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
