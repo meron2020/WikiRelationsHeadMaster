@@ -1,8 +1,7 @@
 package org.wikiRelationsHeadMaster.resources;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.wikiRelationsHeadMaster.core.ApplicationManager;
-import org.wikiRelationsHeadMaster.core.linksObjects.UserObject;
+import org.wikiRelationsHeadMaster.core.HeadMasterObjects.UserObject;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,7 +11,6 @@ import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 @Path("/wiki_relations")
 public class WikiRelationsResource {
