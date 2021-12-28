@@ -1,4 +1,4 @@
-package org.wikiRelationsHeadMaster.core.linksObjects;
+package org.wikiRelationsHeadMaster.core.HeadMasterObjects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
