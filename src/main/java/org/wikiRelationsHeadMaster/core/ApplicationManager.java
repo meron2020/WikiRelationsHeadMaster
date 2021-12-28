@@ -5,7 +5,6 @@ import org.wikiRelationsHeadMaster.core.AgentCommunicationThreads.RankingAgentCo
 import org.wikiRelationsHeadMaster.core.Parsers.JsonParsingClass;
 import org.wikiRelationsHeadMaster.core.linkHandlers.RankedLinksHandler;
 import org.wikiRelationsHeadMaster.core.linkHandlers.RawLinksHandler;
-import org.wikiRelationsHeadMaster.core.linksObjects.LinksObject;
 import org.wikiRelationsHeadMaster.core.networking.HttpRequestClass;
 
 import java.io.IOException;
