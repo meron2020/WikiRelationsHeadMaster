@@ -1,7 +1,7 @@
 package org.wikiRelationsHeadMaster.core.linkHandlers;
 
 import org.wikiRelationsHeadMaster.core.QueryThread;
-import org.wikiRelationsHeadMaster.core.linksObjects.LinksObject;
+import org.wikiRelationsHeadMaster.core.HeadMasterObjects.LinksObject;
 import org.wikiRelationsHeadMaster.core.networking.HttpRequestClass;
 import org.wikiRelationsHeadMaster.core.Parsers.JsonParsingClass;
 
