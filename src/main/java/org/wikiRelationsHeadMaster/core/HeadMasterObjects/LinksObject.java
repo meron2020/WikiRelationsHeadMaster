@@ -1,10 +1,9 @@
-package org.wikiRelationsHeadMaster.core.linksObjects;
+package org.wikiRelationsHeadMaster.core.HeadMasterObjects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 
 public class LinksObject {
     @JsonProperty("Original Link")
