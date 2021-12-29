@@ -7,7 +7,17 @@ public class AgentObject {
     public String communicationUrl;
     @JsonProperty("type")
     public String type;
+    @JsonProperty("port")
+    public String port;
     public Integer requestCount;
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
 
     public Integer getRequestCount() {
         return requestCount;
@@ -15,6 +25,13 @@ public class AgentObject {
 
     public void setRequestCount(Integer requestCount) {
         this.requestCount = requestCount;
+    }
+
+    public void decrementRequestCount() {
+        this.requestCount -= 1;
+    }
+    public void incrementRequestCount(Integer num) {
+        this.requestCount += num;
     }
 
     public String getType() {
@@ -39,6 +56,6 @@ public class AgentObject {
 
     public void setUrl(String url) {
         this.url = url;
-        setCommunicationUrl(this.url+"/communication/");
+        setCommunicationUrl(this.url+"/" + this.type);
     }
 }
