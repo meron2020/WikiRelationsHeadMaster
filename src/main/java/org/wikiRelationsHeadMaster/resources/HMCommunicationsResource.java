@@ -3,6 +3,7 @@ package org.wikiRelationsHeadMaster.resources;
 import org.wikiRelationsHeadMaster.core.AgentHandlers.AgentsHandler;
 import org.wikiRelationsHeadMaster.core.HeadMasterObjects.AgentObject;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -21,8 +22,8 @@ public class HMCommunicationsResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public String postNewAgent(@Context UriInfo uriInfo, AgentObject agentObject) {
-        agentObject.setUrl(uriInfo.getPath());
+    public String postNewAgent(@Context HttpServletRequest request, AgentObject agentObject) {
+        agentObject.setUrl(request.getRemoteAddr() + ":" + agentObject.getPort());
         agentObject.setRequestCount(0);
         agentsHandler.addAgent(agentObject);
         return "Agent info received";
