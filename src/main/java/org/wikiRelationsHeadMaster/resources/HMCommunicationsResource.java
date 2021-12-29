@@ -26,6 +26,8 @@ public class HMCommunicationsResource {
         agentObject.setUrl(request.getRemoteAddr() + ":" + agentObject.getPort());
         agentObject.setRequestCount(0);
         agentsHandler.addAgent(agentObject);
+        System.out.println(agentsHandler.getCircularAgentsList().size());
+        System.out.println(agentsHandler.getRankingAgentList().size());
         return "Agent info received";
     }
 
