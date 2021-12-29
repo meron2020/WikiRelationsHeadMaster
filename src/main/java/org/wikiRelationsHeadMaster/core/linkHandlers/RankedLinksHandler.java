@@ -26,7 +26,24 @@ public class RankedLinksHandler {
     }
 
 
-    public void sendAllReadyCircularLinks(ArrayList<QueryThread> queryThreadsList) throws IOException, InterruptedException {
+    public Integer sendAllCircularLinks(ArrayList<QueryThread> queryThreadsList, String url) throws IOException, InterruptedException {
+        ArrayList<LinksObject> linksObjects = new ArrayList<>();
+        for (QueryThread queryThread: queryThreadsList) {
+            if (queryThread.isReadyToBeSent() && !queryThread.isLinksSent())
+                linksObjects.add(queryThread.getLinksObject());
+            queryThread.setLinksSent(true);
+        }
+            sendLinks(linksObjects, url);
+            if (!linksObjects.isEmpty()) {
+                System.out.println("Sent circular links");
+            }
+
+            return linksObjects.size();
+        }
+
+
+
+    public void s(ArrayList<QueryThread> queryThreadsList, String url) throws IOException, InterruptedException {
         ArrayList<LinksObject> linksObjects = new ArrayList<>();
         for (QueryThread queryThread: queryThreadsList) {
             if (queryThread.isReadyToSendCircularLinks() && !queryThread.isSentCircularLinks()) {
@@ -35,7 +52,7 @@ public class RankedLinksHandler {
             }
 
         }
-        sendLinks(linksObjects);
+        sendLinks(linksObjects, url);
     }
 
 
@@ -57,11 +74,12 @@ public class RankedLinksHandler {
 //    }
 
 
-    public void sendLinks(ArrayList<LinksObject> linksObjects) throws IOException, InterruptedException {
+    public void sendLinks(ArrayList<LinksObject> linksObjects, String url) throws IOException, InterruptedException {
         ArrayList<HashMap<String, Object>> hashMapArrayList =  HttpRequestClass.turnLinksArrayToHashmap(linksObjects);
         for (HashMap<String, Object> hashMap: hashMapArrayList) {
-            HttpRequestClass.sendPOSTRequest(hashMap, this.link);
+            HttpRequestClass.sendPOSTRequest(hashMap, url);
         }}
-
-
 }
+
+
+
