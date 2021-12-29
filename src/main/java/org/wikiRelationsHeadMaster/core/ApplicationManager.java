@@ -1,7 +1,10 @@
 package org.wikiRelationsHeadMaster.core;
 
+import org.checkerframework.checker.units.qual.A;
 import org.wikiRelationsHeadMaster.core.AgentCommunicationThreads.CircularAgentCommsThread;
 import org.wikiRelationsHeadMaster.core.AgentCommunicationThreads.RankingAgentCommsThread;
+import org.wikiRelationsHeadMaster.core.AgentHandlers.AgentsHandler;
+import org.wikiRelationsHeadMaster.core.HeadMasterObjects.AgentObject;
 import org.wikiRelationsHeadMaster.core.Parsers.JsonParsingClass;
 import org.wikiRelationsHeadMaster.core.linkHandlers.RankedLinksHandler;
 import org.wikiRelationsHeadMaster.core.linkHandlers.RawLinksHandler;
@@ -14,6 +17,7 @@ import java.util.Hashtable;
 import java.util.Objects;
 
 public class ApplicationManager implements Runnable{
+    public AgentsHandler agentsHandler;
     public ArrayList<QueryThread> queryThreadsList = new ArrayList<>();
     String circularLinksAgentUrl = "http://127.0.0.1:8090/links/";
     String rankingAgentUrl = "http://127.0.0.1:9000/ranking/";
@@ -21,6 +25,10 @@ public class ApplicationManager implements Runnable{
     public RawLinksHandler rawLinksHandler = new RawLinksHandler(circularLinksAgentUrl, queryThreadsList);
     CircularAgentCommsThread circularAgentCommsThread = new CircularAgentCommsThread(this);
     RankingAgentCommsThread rankingAgentCommsThread = new RankingAgentCommsThread(this);
+
+    public ApplicationManager(AgentsHandler agentsHandler) {
+        this.agentsHandler = agentsHandler;
+    }
 
     public void addQueryThread(QueryThread queryThread) throws IOException, InterruptedException {
         queryThreadsList.add(queryThread);
@@ -32,17 +40,30 @@ public class ApplicationManager implements Runnable{
     }
 
     public Hashtable<Integer, Hashtable<String, Object>> getLinksFromAgent() throws IOException {
-        String response = HttpRequestClass.sendGETRequest(this.circularLinksAgentUrl);
-        return JsonParsingClass.parseLinks(response);
+        Hashtable<Integer, Hashtable<String, Object>> linksHash = new Hashtable<>();
+        for (AgentObject agentObject: agentsHandler.getCircularAgentsList()) {
+        String response = HttpRequestClass.sendGETRequest(agentObject.getUrl());
+        linksHash.putAll(JsonParsingClass.parseLinks(response));
+        }
+        return linksHash;
     }
 
     public Hashtable<Integer, Hashtable<String, Object>> getLinksFromRankingAgent() throws IOException {
-        String response = HttpRequestClass.sendGETRequest(this.rankingAgentUrl);
-        return JsonParsingClass.parseRankedLinks(response);
+        agentsHandler.checkIfAgentsAlive();
+        Hashtable<Integer, Hashtable<String, Object>> linksHash = new Hashtable<>();
+        for (AgentObject agentObject: agentsHandler.getRankingAgentList()) {
+            String response = HttpRequestClass.sendGETRequest(agentObject.getUrl());
+            linksHash.putAll(JsonParsingClass.parseLinks(response));
+        }
+        return linksHash;
     }
 
     public void sendAllRawReadyLinks() throws IOException, InterruptedException {
-        this.rawLinksHandler.sendAllRawReadyLinks(queryThreadsList);
+        agentsHandler.checkIfAgentsAlive();
+        AgentObject agentObject = agentsHandler.getCircularAgentMinimumRequestCount();
+        String url = agentObject.getUrl();
+        Integer linksAmount = this.rawLinksHandler.sendAllRawReadyLinks(queryThreadsList, url);
+        agentObject.incrementRequestCount(linksAmount);
     }
 
     public void sendReadyCircularLinks() throws IOException, InterruptedException {
@@ -65,7 +86,8 @@ public class ApplicationManager implements Runnable{
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        ApplicationManager applicationManager = new ApplicationManager();
+        AgentsHandler agentsHandler = new AgentsHandler();
+        ApplicationManager applicationManager = new ApplicationManager(agentsHandler);
         QueryThread queryThreadOne = new QueryThread("Iran", 20);
         applicationManager.addQueryThread(queryThreadOne);
 //        applicationManager.addQueryThread(secondQueryThread);
