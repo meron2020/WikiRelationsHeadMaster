@@ -9,6 +9,27 @@ public class AgentsHandler {
     ArrayList<AgentObject> circularAgentsList = new ArrayList<>();
     ArrayList<AgentObject> rankingAgentList = new ArrayList<>();
 
+    public void checkIfAgentsAlive() {
+        for (AgentObject circularAgent: circularAgentsList) {
+            if (AgentHealthChecker.checkIfAgentAlive(circularAgent.getUrl())) {
+                this.removeAgent(circularAgent);
+            };
+        }
+        for (AgentObject rankingAgent: rankingAgentList) {
+            if (AgentHealthChecker.checkIfAgentAlive(rankingAgent.getUrl())) {
+                this.removeAgent(rankingAgent);
+            }
+        }
+    }
+
+    public ArrayList<AgentObject> getCircularAgentsList() {
+        return circularAgentsList;
+    }
+
+    public ArrayList<AgentObject> getRankingAgentList() {
+        return rankingAgentList;
+    }
+
     public void addCircularAgent(AgentObject agentObject) {
         circularAgentsList.add(agentObject);
     }
@@ -18,19 +39,19 @@ public class AgentsHandler {
     }
 
     public void addAgent(AgentObject agentObject) {
-        if (Objects.equals(agentObject.getType(), "Circular")) {
+        if (Objects.equals(agentObject.getType(), "links")) {
             circularAgentsList.add(agentObject);
         }
-        if (Objects.equals(agentObject.getType(), "Ranking")) {
+        if (Objects.equals(agentObject.getType(), "ranking")) {
             rankingAgentList.add(agentObject);
         }
     }
 
     public void removeAgent(AgentObject agentObject) {
-        if (Objects.equals(agentObject.getType(), "Circular")) {
+        if (Objects.equals(agentObject.getType(), "links")) {
             circularAgentsList.remove(agentObject);
         }
-        if (Objects.equals(agentObject.getType(), "Ranking")) {
+        if (Objects.equals(agentObject.getType(), "ranking")) {
             rankingAgentList.remove(agentObject);
         }
     }
