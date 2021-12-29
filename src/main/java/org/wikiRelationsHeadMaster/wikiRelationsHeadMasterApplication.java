@@ -3,8 +3,10 @@ package org.wikiRelationsHeadMaster;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.wikiRelationsHeadMaster.core.AgentHandlers.AgentsHandler;
 import org.wikiRelationsHeadMaster.core.ApplicationManager;
 import org.wikiRelationsHeadMaster.resources.FrontPageResource;
+import org.wikiRelationsHeadMaster.resources.HMCommunicationsResource;
 import org.wikiRelationsHeadMaster.resources.WikiRelationsResource;
 
 import java.util.ArrayList;
@@ -30,8 +32,10 @@ public class wikiRelationsHeadMasterApplication extends Application<wikiRelation
                     final Environment environment) {
         // TODO: implement application
         ArrayList<Integer> idArrayList = new ArrayList<>();
-        ApplicationManager applicationManager = new ApplicationManager();
-        new Thread(applicationManager).start();
+        AgentsHandler agentsHandler = new AgentsHandler();
+        ApplicationManager applicationManager = new ApplicationManager(agentsHandler);
+//        new Thread(applicationManager).start();
+        environment.jersey().register(new HMCommunicationsResource(agentsHandler));
         environment.jersey().register(new WikiRelationsResource(applicationManager, idArrayList));
         environment.jersey().register(new FrontPageResource(idArrayList));
     }
