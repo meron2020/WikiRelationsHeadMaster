@@ -23,19 +23,19 @@ public class test extends Thread {
 
     public static void main(String[] args) throws InterruptedException, IOException
     {
-        ArrayList<HashMap<String, String >> topTenRanked;
-        ApplicationManager applicationManager = new ApplicationManager();
-//        applicationManager.startApplication();
-        applicationManager.addThread("Israel", 20);
-        while (true) {
-            ArrayList<HashMap<String, String >> ranked = applicationManager.getRankedLinksById(20);
-            if (!ranked.isEmpty()) {
-                topTenRanked = ranked;
-                break;
-            }
-            Thread.sleep(15000);
-        }
-        System.out.println(topTenRanked);
+//        ArrayList<HashMap<String, String >> topTenRanked;
+//        ApplicationManager applicationManager = new ApplicationManager();
+////        applicationManager.startApplication();
+//        applicationManager.addThread("Israel", 20);
+//        while (true) {
+//            ArrayList<HashMap<String, String >> ranked = applicationManager.getRankedLinksById(20);
+//            if (!ranked.isEmpty()) {
+//                topTenRanked = ranked;
+//                break;
+//            }
+//            Thread.sleep(15000);
+//        }
+//        System.out.println(topTenRanked);
 
     }
 
