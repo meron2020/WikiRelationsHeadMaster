@@ -29,17 +29,19 @@ public class RawLinksHandler {
         return linksObjectArrayList;
     }
 
-    public void sendAllRawReadyLinks(ArrayList<QueryThread> queryThreadsList) throws IOException, InterruptedException {
+    public Integer sendAllRawReadyLinks(ArrayList<QueryThread> queryThreadsList, String url) throws IOException, InterruptedException {
         ArrayList<LinksObject> linksObjects = new ArrayList<>();
         for (QueryThread queryThread : queryThreadsList) {
             if (queryThread.isReadyToBeSent() && !queryThread.isLinksSent())
                 linksObjects.add(queryThread.getLinksObject());
                 queryThread.setLinksSent(true);
         }
-        sendLinks(linksObjects);
+        sendLinks(linksObjects, url);
         if (!linksObjects.isEmpty()) {
             System.out.println("Sent raw links");
         }
+
+        return linksObjects.size();
     }
 
 
@@ -60,9 +62,9 @@ public class RawLinksHandler {
         return this.queryThreadArrayList;
     }
 
-    public void sendLinks(ArrayList<LinksObject> linksObjects) throws IOException, InterruptedException {
+    public void sendLinks(ArrayList<LinksObject> linksObjects, String url) throws IOException, InterruptedException {
         ArrayList<HashMap<String, Object>> hashMapArrayList =  HttpRequestClass.turnLinksArrayToHashmap(linksObjects);
         for (HashMap<String, Object> hashMap: hashMapArrayList) {
-            HttpRequestClass.sendPOSTRequest(hashMap, this.url);
+            HttpRequestClass.sendPOSTRequest(hashMap, url);
     }}
 }
