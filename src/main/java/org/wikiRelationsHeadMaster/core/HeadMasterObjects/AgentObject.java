@@ -27,8 +27,8 @@ public class AgentObject {
         this.requestCount = requestCount;
     }
 
-    public void decrementRequestCount() {
-        this.requestCount -= 1;
+    public void decrementRequestCount(Integer num) {
+        this.requestCount -= num;
     }
     public void incrementRequestCount(Integer num) {
         this.requestCount += num;
