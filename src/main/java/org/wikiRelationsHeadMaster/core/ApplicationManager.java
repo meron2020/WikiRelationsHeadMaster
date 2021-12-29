@@ -43,7 +43,9 @@ public class ApplicationManager implements Runnable{
         Hashtable<Integer, Hashtable<String, Object>> linksHash = new Hashtable<>();
         for (AgentObject agentObject: agentsHandler.getCircularAgentsList()) {
         String response = HttpRequestClass.sendGETRequest(agentObject.getUrl());
-        linksHash.putAll(JsonParsingClass.parseLinks(response));
+        Hashtable<Integer, Hashtable<String, Object>> parsedLinks = JsonParsingClass.parseLinks(response);
+        agentObject.decrementRequestCount(parsedLinks.size());
+        linksHash.putAll(parsedLinks);
         }
         return linksHash;
     }
@@ -53,7 +55,9 @@ public class ApplicationManager implements Runnable{
         Hashtable<Integer, Hashtable<String, Object>> linksHash = new Hashtable<>();
         for (AgentObject agentObject: agentsHandler.getRankingAgentList()) {
             String response = HttpRequestClass.sendGETRequest(agentObject.getUrl());
-            linksHash.putAll(JsonParsingClass.parseLinks(response));
+            Hashtable<Integer, Hashtable<String, Object>> parsedLinks = JsonParsingClass.parseLinks(response);
+            agentObject.decrementRequestCount(parsedLinks.size());
+            linksHash.putAll(parsedLinks);
         }
         return linksHash;
     }
@@ -67,7 +71,11 @@ public class ApplicationManager implements Runnable{
     }
 
     public void sendReadyCircularLinks() throws IOException, InterruptedException {
-        this.rankedLinksHandler.sendAllReadyCircularLinks(queryThreadsList);
+        agentsHandler.checkIfAgentsAlive();
+        AgentObject agentObject = agentsHandler.getRankingAgentMinimumRequestCount();
+        String url = agentObject.getUrl();
+        Integer linksAmount = this.rankedLinksHandler.sendAllCircularLinks(queryThreadsList, url);
+        agentObject.incrementRequestCount(linksAmount);
     }
 
     public void addThread(String query, Integer id) throws IOException, InterruptedException {
