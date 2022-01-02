@@ -32,10 +32,10 @@ public class RawLinksHandler {
     public Integer sendAllRawReadyLinks(ArrayList<QueryThread> queryThreadsList, String url) throws IOException, InterruptedException {
         ArrayList<LinksObject> linksObjects = new ArrayList<>();
         for (QueryThread queryThread : queryThreadsList) {
-            if (queryThread.isReadyToBeSent() && !queryThread.isLinksSent())
+            if (queryThread.isReadyToBeSent() && !queryThread.isLinksSent()) {
                 linksObjects.add(queryThread.getLinksObject());
                 queryThread.setLinksSent(true);
-        }
+        }}
         sendLinks(linksObjects, url);
         if (!linksObjects.isEmpty()) {
             System.out.println("Sent raw links");
