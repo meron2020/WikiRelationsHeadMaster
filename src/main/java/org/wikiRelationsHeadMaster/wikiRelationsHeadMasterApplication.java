@@ -34,7 +34,7 @@ public class wikiRelationsHeadMasterApplication extends Application<wikiRelation
         ArrayList<Integer> idArrayList = new ArrayList<>();
         AgentsHandler agentsHandler = new AgentsHandler();
         ApplicationManager applicationManager = new ApplicationManager(agentsHandler);
-//        new Thread(applicationManager).start();
+        new Thread(applicationManager).start();
         environment.jersey().register(new HMCommunicationsResource(agentsHandler));
         environment.jersey().register(new WikiRelationsResource(applicationManager, idArrayList));
         environment.jersey().register(new FrontPageResource(idArrayList));
