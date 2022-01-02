@@ -1,6 +1,5 @@
 package org.wikiRelationsHeadMaster.core;
 
-import org.checkerframework.checker.units.qual.A;
 import org.wikiRelationsHeadMaster.core.AgentCommunicationThreads.CircularAgentCommsThread;
 import org.wikiRelationsHeadMaster.core.AgentCommunicationThreads.RankingAgentCommsThread;
 import org.wikiRelationsHeadMaster.core.AgentHandlers.AgentsHandler;
@@ -42,7 +41,7 @@ public class ApplicationManager implements Runnable{
     public Hashtable<Integer, Hashtable<String, Object>> getLinksFromAgent() throws IOException {
         Hashtable<Integer, Hashtable<String, Object>> linksHash = new Hashtable<>();
         for (AgentObject agentObject: agentsHandler.getCircularAgentsList()) {
-        String response = HttpRequestClass.sendGETRequest(agentObject.getUrl());
+        String response = HttpRequestClass.sendGETRequest(agentObject.getCommunicationUrl());
         Hashtable<Integer, Hashtable<String, Object>> parsedLinks = JsonParsingClass.parseLinks(response);
         agentObject.decrementRequestCount(parsedLinks.size());
         linksHash.putAll(parsedLinks);
@@ -54,8 +53,8 @@ public class ApplicationManager implements Runnable{
         agentsHandler.checkIfAgentsAlive();
         Hashtable<Integer, Hashtable<String, Object>> linksHash = new Hashtable<>();
         for (AgentObject agentObject: agentsHandler.getRankingAgentList()) {
-            String response = HttpRequestClass.sendGETRequest(agentObject.getUrl());
-            Hashtable<Integer, Hashtable<String, Object>> parsedLinks = JsonParsingClass.parseLinks(response);
+            String response = HttpRequestClass.sendGETRequest(agentObject.getCommunicationUrl());
+            Hashtable<Integer, Hashtable<String, Object>> parsedLinks = JsonParsingClass.parseRankedLinks(response);
             agentObject.decrementRequestCount(parsedLinks.size());
             linksHash.putAll(parsedLinks);
         }
@@ -63,19 +62,23 @@ public class ApplicationManager implements Runnable{
     }
 
     public void sendAllRawReadyLinks() throws IOException, InterruptedException {
-        agentsHandler.checkIfAgentsAlive();
-        AgentObject agentObject = agentsHandler.getCircularAgentMinimumRequestCount();
-        String url = agentObject.getUrl();
-        Integer linksAmount = this.rawLinksHandler.sendAllRawReadyLinks(queryThreadsList, url);
-        agentObject.incrementRequestCount(linksAmount);
+        if (!agentsHandler.getCircularAgentsList().isEmpty()) {
+            agentsHandler.checkIfAgentsAlive();
+            AgentObject agentObject = agentsHandler.getCircularAgentMinimumRequestCount();
+            String url = agentObject.getCommunicationUrl();
+            Integer linksAmount = this.rawLinksHandler.sendAllRawReadyLinks(queryThreadsList, url);
+            agentObject.incrementRequestCount(linksAmount);
+        }
     }
 
     public void sendReadyCircularLinks() throws IOException, InterruptedException {
-        agentsHandler.checkIfAgentsAlive();
-        AgentObject agentObject = agentsHandler.getRankingAgentMinimumRequestCount();
-        String url = agentObject.getUrl();
-        Integer linksAmount = this.rankedLinksHandler.sendAllCircularLinks(queryThreadsList, url);
-        agentObject.incrementRequestCount(linksAmount);
+        if (!agentsHandler.getRankingAgentList().isEmpty()) {
+            agentsHandler.checkIfAgentsAlive();
+            AgentObject agentObject = agentsHandler.getRankingAgentMinimumRequestCount();
+            String url = agentObject.getCommunicationUrl();
+            Integer linksAmount = this.rankedLinksHandler.sendAllCircularLinks(queryThreadsList, url);
+            agentObject.incrementRequestCount(linksAmount);
+        }
     }
 
     public void addThread(String query, Integer id) throws IOException, InterruptedException {
