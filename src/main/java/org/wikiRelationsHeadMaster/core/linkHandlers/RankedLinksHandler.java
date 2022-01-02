@@ -1,9 +1,9 @@
 package org.wikiRelationsHeadMaster.core.linkHandlers;
 
-import org.wikiRelationsHeadMaster.core.QueryThread;
 import org.wikiRelationsHeadMaster.core.HeadMasterObjects.LinksObject;
-import org.wikiRelationsHeadMaster.core.networking.HttpRequestClass;
 import org.wikiRelationsHeadMaster.core.Parsers.JsonParsingClass;
+import org.wikiRelationsHeadMaster.core.QueryThread;
+import org.wikiRelationsHeadMaster.core.networking.HttpRequestClass;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,9 +29,10 @@ public class RankedLinksHandler {
     public Integer sendAllCircularLinks(ArrayList<QueryThread> queryThreadsList, String url) throws IOException, InterruptedException {
         ArrayList<LinksObject> linksObjects = new ArrayList<>();
         for (QueryThread queryThread: queryThreadsList) {
-            if (queryThread.isReadyToBeSent() && !queryThread.isLinksSent())
+            if (queryThread.isReadyToSendCircularLinks() && !queryThread.isSentCircularLinks()) {
                 linksObjects.add(queryThread.getLinksObject());
-            queryThread.setLinksSent(true);
+                queryThread.setSentCircularLinks(true);
+            }
         }
             sendLinks(linksObjects, url);
             if (!linksObjects.isEmpty()) {
@@ -42,18 +43,6 @@ public class RankedLinksHandler {
         }
 
 
-
-    public void s(ArrayList<QueryThread> queryThreadsList, String url) throws IOException, InterruptedException {
-        ArrayList<LinksObject> linksObjects = new ArrayList<>();
-        for (QueryThread queryThread: queryThreadsList) {
-            if (queryThread.isReadyToSendCircularLinks() && !queryThread.isSentCircularLinks()) {
-                linksObjects.add(queryThread.getLinksObject());
-                queryThread.setSentCircularLinks(true);
-            }
-
-        }
-        sendLinks(linksObjects, url);
-    }
 
 
     public ArrayList<QueryThread> updateAllQueryThreads(Hashtable<Integer, Hashtable<String, Object>> linksHash) {
