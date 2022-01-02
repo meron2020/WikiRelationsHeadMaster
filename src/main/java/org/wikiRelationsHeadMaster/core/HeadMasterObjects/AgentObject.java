@@ -56,6 +56,6 @@ public class AgentObject {
 
     public void setUrl(String url) {
         this.url = url;
-        setCommunicationUrl(this.url+"/" + this.type);
+        setCommunicationUrl("http://" + this.url+"/" + this.type);
     }
 }
